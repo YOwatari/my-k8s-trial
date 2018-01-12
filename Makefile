@@ -2,6 +2,11 @@ run: create_secret.txt create_mysql_service.txt create_wordpress_service.txt
 	@echo Open http://localhost !
 	@echo kubectl port-forward wordpress-mysql-xxxxxxxxx 3306:3306
 
+clean:
+	kubectl delete -f wordpress-deployment.yaml
+	kubectl delete -f mysql-deployment.yaml
+	kubectl delete -f mysql-pass.yaml
+
 create_secret.txt: mysql-pass.yaml
 	kubectl create -f $<
 	kubectl get secrets
@@ -24,3 +29,5 @@ mysql-deployment.yaml:
 
 wordpress-deployment.yaml:
 	curl -sSL -O https://kubernetes.io/docs/tutorials/stateful-application/mysql-wordpress-persistent-volume/wordpress-deployment.yaml
+
+.PHONY: run clean
